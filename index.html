@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>NixioLand | GTA RP</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* --- VARIABLES ET RESET --- */
+        :root {
+            --bg-dark: #070708;
+            --bg-card: rgba(21, 21, 24, 0.9);
+            --primary: #8a2be2;
+            --secondary: #00d4ff;
+            --accent: #ff007a;
+            --text-light: #f4f4f4;
+            --text-muted: #a0a0a0;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --neon-glow: 0 0 20px rgba(138, 43, 226, 0.5);
+            --discord: #5865F2;
+            --instagram: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-dark); }
+        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- BACKGROUND DYNAMIQUE --- */
+        .background-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .background-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.25) contrast(1.1);
+        }
+
+        .overlay-gradient {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, transparent 0%, var(--bg-dark) 100%),
+                        linear-gradient(to bottom, rgba(7, 7, 8, 0.5), var(--bg-dark));
+        }
+
+        /* --- HEADER & NAVIGATION --- */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 2000;
+            transition: var(--transition);
+            background: transparent;
+        }
+
+        header.scrolled {
+            padding: 12px 5%;
+            background: rgba(7, 7, 8, 0.95);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 10px rgba(138, 43, 226, 0.3));
+            cursor: pointer;
+            z-index: 2100;
+        }
+
+        nav.desktop-nav { display: none; }
+        nav.desktop-nav ul { display: flex; list-style: none; gap: 5px; }
+        nav.desktop-nav a {
+            text-decoration: none;
+            color: var(--text-light);
+            font-weight: 700;
+            font-size: 0.7rem; /* Réduit légèrement */
+            text-transform: uppercase;
+            padding: 8px 10px; /* Réduit l'espacement entre les boutons */
+            border-radius: 8px;
+            transition: var(--transition);
+            opacity: 0.8;
+            white-space: nowrap; /* Empêche le texte de revenir à la ligne */
+        }
+        nav.desktop-nav a:hover, nav.desktop-nav a.active {
+            opacity: 1;
+            color: var(--secondary);
+            background: rgba(0, 212, 255, 0.1);
+        }
+
+        .menu-toggle { display: flex; flex-direction: column; gap: 6px; cursor: pointer; z-index: 2100; }
+        .menu-toggle span { width: 28px; height: 2px; background: var(--text-light); border-radius: 2px; transition: var(--transition); }
+        .menu-toggle.open span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+        .menu-toggle.open span:nth-child(2) { opacity: 0; }
+        .menu-toggle.open span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+        nav.mobile-nav {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            height: 100vh;
+            background: rgba(7, 7, 8, 0.98);
+            backdrop-filter: blur(25px);
+            z-index: 1500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+        }
+        nav.mobile-nav.open { right: 0; }
+        nav.mobile-nav ul { list-style: none; text-align: center; }
+        nav.mobile-nav li { margin: 20px 0; }
+        nav.mobile-nav a {
+            text-decoration: none;
+            color: var(--text-light);
+            font-size: clamp(1.2rem, 6vw, 2rem);
+            font-weight: 900;
+            text-transform: uppercase;
+        }
+
+        /* --- PAGES --- */
+        .page-content {
+            flex: 1;
+            padding-top: 80px;
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+        .page-content.active { display: flex; flex-direction: column; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.98); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* --- HERO --- */
+        .hero-section {
+            height: calc(100vh - 80px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+        }
+        .hero-section h1 { font-size: clamp(3rem, 15vw, 8rem); font-weight: 900; line-height: 0.85; margin-bottom: 15px; letter-spacing: -4px; }
+        .hero-section p { font-size: clamp(1rem, 3vw, 1.4rem); color: var(--secondary); font-weight: 700; letter-spacing: 5px; margin-bottom: 50px; text-transform: uppercase; }
+
+        /* --- CONTENT --- */
+        .content-wrapper { 
+            padding: 60px 5% 120px;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .section-title { text-align: center; font-size: clamp(2rem, 5vw, 3rem); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 3px; font-weight: 900; }
+        .section-subtitle { text-align: center; color: var(--text-muted); margin-bottom: 50px; font-weight: 400; }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            padding: 30px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+        .card:hover { transform: translateY(-5px); border-color: var(--primary); }
+
+        /* --- BOUTIQUE SPECIFIC --- */
+        .shopcar-filter {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .shopmoto-filter {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: var(--transition);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+        .filter-btn.active, .filter-btn:hover {
+            background: var(--primary);
+            border-color: var(--primary);
+            box-shadow: 0 0 15px rgba(138, 43, 226, 0.4);
+        }
+
+        .vehicle-card { padding: 0; display: flex; flex-direction: column; transition: all 0.4s ease; }
+        /* Style pour cacher les cartes non filtrées */
+        .vehicle-card.hidden { display: none; opacity: 0; transform: scale(0.8); }
+
+        .vehicle-img {
+            width: 100%;
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            border-radius: 20px 20px 0 0;
+            position: relative;
+        }
+        .vehicle-price {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            background: var(--bg-dark);
+            padding: 8px 15px;
+            border-radius: 10px;
+            color: var(--secondary);
+            font-weight: 900;
+            border: 1px solid var(--secondary);
+        }
+        .vehicle-info { padding: 25px; }
+        .vehicle-name { font-size: 1.2rem; font-weight: 900; margin-bottom: 5px; text-transform: uppercase; }
+        .vehicle-category { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 15px; display: block; }
+
+        /* --- CONTROLS / BUTTONS / FOOTER --- */
+        .controls-list { list-style: none; }
+        .control-item { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+        .key-box { background: #2a2a2e; color: var(--secondary); padding: 5px 12px; border-radius: 6px; font-family: monospace; font-weight: 900; border-bottom: 3px solid #1a1a1e; min-width: 45px; text-align: center; }
+        .cta-group { width: 100%; max-width: 450px; display: flex; flex-direction: column; gap: 15px; }
+        .btn { width: 100%; padding: 18px 25px; border-radius: 12px; text-decoration: none; font-weight: 800; text-transform: uppercase; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; transition: var(--transition); border: none; cursor: pointer; color: white; }
+        .btn-primary { background: var(--primary); box-shadow: var(--neon-glow); }
+        .btn-buy { background: linear-gradient(to right, var(--primary), var(--secondary)); margin-top: 15px; font-size: 0.75rem; padding: 12px; }
+        .btn-discord { background: var(--discord); }
+        footer { padding: 60px 5% 40px; background: #050505; text-align: center; border-top: 1px solid rgba(255, 255, 255, 0.05); }
+        .social-row { display: flex; justify-content: center; gap: 15px; margin-bottom: 30px; flex-wrap: wrap; }
+        .social-link { min-width: 120px; padding: 12px 20px; border-radius: 10px; font-size: 0.8rem; font-weight: 800; text-decoration: none; color: white; background: #111; transition: var(--transition); border: 1px solid #222; }
+        .social-link.insta { background: var(--instagram); border: none; }
+
+        @media (min-width: 1024px) {
+            .menu-toggle { display: none; }
+            .desktop-nav { display: block !important; }
+            .grid-container { grid-template-columns: repeat(3, 1fr); }
+            .grid-container.four-cols { grid-template-columns: repeat(4, 1fr); }
+            .cta-group { flex-direction: row; max-width: 600px; }
+        }
+
+        .job-tag { font-size: 0.7rem; font-weight: 900; padding: 5px 15px; background: rgba(0, 212, 255, 0.1); border: 1px solid var(--secondary); border-radius: 50px; color: var(--secondary); display: inline-block; margin-bottom: 15px; }
+        body.no-scroll { overflow: hidden; }
+    </style>
+</head>
+<body>
+
+    <div class="background-container">
+        <div class="overlay-gradient"></div>
+    </div>
+
+    <header id="mainHeader">
+        <div class="logo" onclick="navigateTo('home')">NIXIOLAND</div>
+        <nav class="desktop-nav">
+            <ul>
+                <li><a href="#" onclick="navigateTo('home')" class="nav-link active" data-page="home">Accueil</a></li>
+                <li><a href="#" onclick="navigateTo('shopcar')" class="nav-link" data-page="shopcar">Boutique Voitures</a></li>
+                <li><a href="#" onclick="navigateTo('shopmoto')" class="nav-link" data-page="shopmoto">Boutique Motos</a></li>
+                <li><a href="#" onclick="navigateTo('server')" class="nav-link" data-page="server">Serveur</a></li>
+                <li><a href="#" onclick="navigateTo('jobs')" class="nav-link" data-page="jobs">Métiers</a></li>
+                <li><a href="#" onclick="navigateTo('controls')" class="nav-link" data-page="controls">Touches</a></li>
+                <li><a href="#" onclick="navigateTo('rules')" class="nav-link" data-page="rules">Règlement</a></li>
+                <li><a href="#" onclick="navigateTo('docs')" class="nav-link" data-page="docs">Documents</a></li>
+                <li><a href="#" onclick="navigateTo('join')" class="nav-link" data-page="join">Rejoindre</a></li>
+            </ul>
+        </nav>
+        <div class="menu-toggle" id="menuBtn" onclick="toggleMenu()">
+            <span></span><span></span><span></span>
+        </div>
+    </header>
+
+    <nav class="mobile-nav" id="mobileNav">
+        <ul>
+            <li><a href="#" onclick="navigateTo('home')">Accueil</a></li>
+            <li><a href="#" onclick="navigateTo('shopcar')">Boutique Voitures</a></li>
+            <li><a href="#" onclick="navigateTo('shopmoto')">Boutique Motos</a></li>
+            <li><a href="#" onclick="navigateTo('server')">Serveur</a></li>
+            <li><a href="#" onclick="navigateTo('jobs')">Métiers</a></li>
+            <li><a href="#" onclick="navigateTo('controls')">Touches</a></li>
+            <li><a href="#" onclick="navigateTo('rules')">Règlement</a></li>
+            <li><a href="#" onclick="navigateTo('docs')">Documents</a></li>
+            <li><a href="#" onclick="navigateTo('join')">Rejoindre</a></li>
+        </ul>
+    </nav>
+
+    <!-- ACCUEIL -->
+    <main id="page-home" class="page-content active">
+        <section class="hero-section">
+            <h1>NIXIOLAND</h1>
+            <p>VOTRE HISTOIRE COMMENCE ICI</p>
+            <div class="cta-group">
+                <a href="#" onclick="navigateTo('join')" class="btn btn-primary">Rejoindre la ville</a>
+                <a href="#" onclick="navigateTo('shopcar')" class="btn" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);">Boutique voitures</a>
+                <a href="#" onclick="navigateTo('shopmoto')" class="btn" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);">Boutique motos</a>
+                <a href="https://discord.gg/TgVbXT9Kaf" target="_blank" class="btn btn-discord">Rejoindre Discord</a>
+            </div>
+        </section>
+    </main>
+
+    <!-- BOUTIQUE VOITURES -->
+    <main id="page-shopcar" class="page-content">
+    <div class="content-wrapper">
+        <h2 class="section-title">Boutique Voitures</h2>
+        <p class="section-subtitle">Personnalisez votre expérience avec nos voitures exclusifs</p>
+
+        <div class="shopcar-filter">
+            <button class="filter-btn active" data-filter="all">Tous</button>
+            <button class="filter-btn" data-filter="alfaromeo">Alfa Romeo</button>
+            <button class="filter-btn" data-filter="alpine">Alpine</button>
+            <button class="filter-btn" data-filter="astonmartin">Aston Martin</button>
+            <button class="filter-btn" data-filter="audi">Audi</button>
+            <button class="filter-btn" data-filter="bentley">Bentley</button>
+            <button class="filter-btn" data-filter="bmw">BMW</button>
+            <button class="filter-btn" data-filter="bugatti">Bugatti</button>
+            <button class="filter-btn" data-filter="citroen">Citroën</button>
+            <button class="filter-btn" data-filter="dacia">Dacia</button>
+            <button class="filter-btn" data-filter="ferrari">Ferrari</button>
+            <button class="filter-btn" data-filter="ford">Ford</button>
+            <button class="filter-btn" data-filter="hyundai">Hyundai</button>
+            <button class="filter-btn" data-filter="jaguar">Jaguar</button>
+            <button class="filter-btn" data-filter="jeep">Jeep</button>
+            <button class="filter-btn" data-filter="kia">Kia</button>
+            <button class="filter-btn" data-filter="lamborghini">Lamborghini</button>
+            <button class="filter-btn" data-filter="landrover">Land Rover</button>
+            <button class="filter-btn" data-filter="lexus">Lexus</button>
+            <button class="filter-btn" data-filter="maserati">Maserati</button>
+            <button class="filter-btn" data-filter="mazda">Mazda</button>
+            <button class="filter-btn" data-filter="mercedes">Mercedes</button>
+            <button class="filter-btn" data-filter="mini">Mini</button>
+            <button class="filter-btn" data-filter="nissan">Nissan</button>
+            <button class="filter-btn" data-filter="opel">Opel</button>
+            <button class="filter-btn" data-filter="peugeot">Peugeot</button>
+            <button class="filter-btn" data-filter="porsche">Porsche</button>
+            <button class="filter-btn" data-filter="renault">Renault</button>
+            <button class="filter-btn" data-filter="tesla">Tesla</button>
+            <button class="filter-btn" data-filter="toyota">Toyota</button>
+            <button class="filter-btn" data-filter="volkswagen">Volkswagen</button>
+            <button class="filter-btn" data-filter="volvo">Volvo</button>
+        </div>
+
+        <div class="grid-container four-cols" id="vehiclesGrid">
+            <div class="card vehicle-card" data-category="bmw">
+                <div class="vehicle-img" style="background-image: url('https://images.unsplash.com/photo-1544636331-e26879cd4d9b?q=80&w=1974&auto=format&fit=crop');">
+                    <div class="vehicle-price">1500 NC</div>
+                </div>
+                <div class="vehicle-info">
+                    <span class="vehicle-category">Super Sport</span>
+                    <h3 class="vehicle-name">Ferrari Purosangue</h3>
+                    <p style="font-size: 0.8rem; color: var(--text-muted);">Vitesse max : 320 km/h. Maniabilité exceptionnelle.</p>
+                    <a href="https://paypal.me/nixiolandfa" target="_blank" class="btn btn-buy" style="display: block; text-align: center; text-decoration: none;">Acheter maintenant</a>
+                </div>
+            </div>
+
+            <div class="card vehicle-card" data-category="bmw">
+                <div class="vehicle-img" style="background-image: url('https://images.unsplash.com/photo-1603584173870-7f3ca99a918b?q=80&w=2070&auto=format&fit=crop');">
+                    <div class="vehicle-price">1200 NC</div>
+                </div>
+                <div class="vehicle-info">
+                    <span class="vehicle-category">Sport</span>
+                    <h3 class="vehicle-name">BMW M4 Competition</h3>
+                    <p style="font-size: 0.8rem; color: var(--text-muted);">Le choix parfait pour les drifts en ville.</p>
+                    <a href="https://paypal.me/nixiolandfa" target="_blank" class="btn btn-buy" style="display: block; text-align: center; text-decoration: none;">Acheter maintenant</a>
+                </div>
+            </div>
+
+            <div class="card vehicle-card" data-category="off-road">
+                <div class="vehicle-img" style="background-image: url('https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?q=80&w=2070&auto=format&fit=crop');">
+                    <div class="vehicle-price">900 NC</div>
+                </div>
+                <div class="vehicle-info">
+                    <span class="vehicle-category">Off-Road</span>
+                    <h3 class="vehicle-name">Ford Raptor R</h3>
+                    <p style="font-size: 0.8rem; color: var(--text-muted);">Dominez le Mont Chiliad sans difficulté.</p>
+                    <a href="https://paypal.me/nixiolandfa" target="_blank" class="btn btn-buy" style="display: block; text-align: center; text-decoration: none;">Acheter maintenant</a>
+                </div>
+            </div>
+
+            <div class="card vehicle-card" data-category="motos">
+                <div class="vehicle-img" style="background-image: url('https://images.unsplash.com/photo-1558981403-c5f9199a28af?q=80&w=2070&auto=format&fit=crop');">
+                    <div class="vehicle-price">800 NC</div>
+                </div>
+                <div class="vehicle-info">
+                    <span class="vehicle-category">Motos</span>
+                    <h3 class="vehicle-name">Kawasaki H2R</h3>
+                    <p style="font-size: 0.8rem; color: var(--text-muted);">La moto la plus rapide de l'état.</p>
+                    <a href="https://paypal.me/nixiolandfa" target="_blank" class="btn btn-buy" style="display: block; text-align: center; text-decoration: none;">Acheter maintenant</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- BOUTIQUE MOTOS -->
+    <main id="page-shopmoto" class="page-content">
+    <div class="content-wrapper">
+        <h2 class="section-title">Boutique Motos</h2>
+        <p class="section-subtitle">Personnalisez votre expérience avec nos motos exclusifs</p>
+
+        <div class="shopmoto-filter">
+            <button class="filter-btn active" data-filter="all">Tous</button>
+            <button class="filter-btn" data-filter="aprilia">Aprilia</button>
+            <button class="filter-btn" data-filter="benelli">Benelli</button>
+            <button class="filter-btn" data-filter="bmw">BMW Motorrad</button>
+            <button class="filter-btn" data-filter="ducati">Ducati</button>
+            <button class="filter-btn" data-filter="harley">Harley-Davidson</button>
+            <button class="filter-btn" data-filter="honda">Honda</button>
+            <button class="filter-btn" data-filter="husqvarna">Husqvarna</button>
+            <button class="filter-btn" data-filter="indian">Indian</button>
+            <button class="filter-btn" data-filter="kawasaki">Kawasaki</button>
+            <button class="filter-btn" data-filter="ktm">KTM</button>
+            <button class="filter-btn" data-filter="motoguzzi">Moto Guzzi</button>
+            <button class="filter-btn" data-filter="mvagusta">MV Agusta</button>
+            <button class="filter-btn" data-filter="royalenfield">Royal Enfield</button>
+            <button class="filter-btn" data-filter="suzuki">Suzuki</button>
+            <button class="filter-btn" data-filter="triumph">Triumph</button>
+            <button class="filter-btn" data-filter="yamaha">Yamaha</button>
+        </div>
+
+        <div class="grid-container four-cols" id="vehiclesGrid">
+            <div class="card vehicle-card" data-category="bmw">
+                <div class="vehicle-img" style="background-image: url('https://images.unsplash.com/photo-1544636331-e26879cd4d9b?q=80&w=1974&auto=format&fit=crop');">
+                    <div class="vehicle-price">1500 NC</div>
+                </div>
+                <div class="vehicle-info">
+                    <span class="vehicle-category">Super Sport</span>
+                    <h3 class="vehicle-name">Ferrari Purosangue</h3>
+                    <p style="font-size: 0.8rem; color: var(--text-muted);">Vitesse max : 320 km/h. Maniabilité exceptionnelle.</p>
+                    <a href="https://paypal.me/nixiolandfa" target="_blank" class="btn btn-buy" style="display: block; text-align: center; text-decoration: none;">Acheter maintenant</a>
+                </div>
+            </div>
+
+            <div class="card vehicle-card" data-category="bmw">
+                <div class="vehicle-img" style="background-image: url('https://images.unsplash.com/photo-1603584173870-7f3ca99a918b?q=80&w=2070&auto=format&fit=crop');">
+                    <div class="vehicle-price">1200 NC</div>
+                </div>
+                <div class="vehicle-info">
+                    <span class="vehicle-category">Sport</span>
+                    <h3 class="vehicle-name">BMW M4 Competition</h3>
+                    <p style="font-size: 0.8rem; color: var(--text-muted);">Le choix parfait pour les drifts en ville.</p>
+                    <a href="https://paypal.me/nixiolandfa" target="_blank" class="btn btn-buy" style="display: block; text-align: center; text-decoration: none;">Acheter maintenant</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+    <!-- SERVEUR -->
+    <main id="page-server" class="page-content">
+        <div class="content-wrapper">
+            <h2 class="section-title">L'Univers</h2>
+            <div class="grid-container">
+                <div class="card">
+                    <h3 style="color: var(--secondary); margin-bottom: 15px;">Économie Dynamique</h3>
+                    <p>Chaque action a un impact sur le marché. Créez votre entreprise, gérez vos stocks et dominez l'économie locale.</p>
+                </div>
+                <div class="card">
+                    <h3 style="color: var(--secondary); margin-bottom: 15px;">Scripts Exclusifs</h3>
+                    <p>Système de drogue avancé, braquages multi-étapes et inventaire visuel moderne pour une immersion sans précédent.</p>
+                </div>
+                <div class="card">
+                    <h3 style="color: var(--secondary); margin-bottom: 15px;">Performance PC</h3>
+                    <p>Optimisation maximale du mapping et des véhicules pour garantir 100+ FPS même en zone de forte influence.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- TOUCHES / CONTROLS -->
+    <main id="page-controls" class="page-content">
+        <div class="content-wrapper">
+            <h2 class="section-title">Touches en jeu</h2>
+            <div class="grid-container">
+                <!-- Général -->
+                <div class="card">
+                    <h3 style="color: var(--primary); margin-bottom: 20px; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 2px;">Général</h3>
+                    <ul class="controls-list">
+                        <li class="control-item"><span>Inventaire</span> <span class="key-box">F2</span></li>
+                        <li class="control-item"><span>Menu Personnel</span> <span class="key-box">F5</span></li>
+                        <li class="control-item"><span>Téléphone</span> <span class="key-box">F1</span></li>
+                        <li class="control-item"><span>Menu Interaction</span> <span class="key-box">E</span></li>
+                    </ul>
+                </div>
+                <!-- Véhicules -->
+                <div class="card">
+                    <h3 style="color: var(--secondary); margin-bottom: 20px; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 2px;">Véhicules</h3>
+                    <ul class="controls-list">
+                        <li class="control-item"><span>Verrouiller</span> <span class="key-box">U</span></li>
+                        <li class="control-item"><span>Coffre</span> <span class="key-box">K</span></li>
+                    </ul>
+                </div>
+                <!-- Métiers / Communication -->
+                <div class="card">
+                    <h3 style="color: #ff3e3e; margin-bottom: 20px; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 2px;">Social & Métier</h3>
+                    <ul class="controls-list">
+                        <li class="control-item"><span>Parler</span> <span class="key-box">À CONFIGURER</span></li>
+                        <li class="control-item"><span>Menu Métier</span> <span class="key-box">F6</span></li>
+                        <li class="control-item"><span>Crier / Chuchoter</span> <span class="key-box">À CONFIGURER</span></li>
+                        <li class="control-item"><span>Lever les mains</span> <span class="key-box">À CONFIGURER</span></li>
+                        <li class="control-item"><span>Pointé du doigt</span> <span class="key-box">B</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- METIERS -->
+    <main id="page-jobs" class="page-content">
+    <div class="content-wrapper">
+        <h2 class="section-title">Carrières & Métiers</h2>
+        <div class="grid-container">
+            
+            <div class="card">
+                <span class="job-tag tag-official">SÉCURITÉ</span>
+                <h3>👮 SASP NORD / SUD</h3>
+                <p>Assurez l'ordre et la sécurité sur l'ensemble du territoire.</p>
+            </div>
+
+            <div class="card">
+                <span class="job-tag tag-medical">MÉDICAL</span>
+                <h3>🚑 Ambulance</h3>
+                <p>Portez secours aux citoyens et gérez les urgences vitales.</p>
+            </div>
+
+            <div class="card">
+                <span class="job-tag tag-official">GOUVERNEMENT</span>
+                <h3>⚖️ Gouvernement</h3>
+                <p>Gérez la politique de la ville et les services administratifs.</p>
+            </div>
+
+            <div class="card">
+                <span class="job-tag tag-mechanic">MÉCANIQUE</span>
+                <h3>🔧 Benny's / LS Custom</h3>
+                <p>Customisation, réparations et dépannages mécaniques.</p>
+            </div>
+
+            <div class="card">
+                <span class="job-tag tag-commerce">COMMERCE</span>
+                <h3>🏎️ Concessionnaire</h3>
+                <p>Vendez les plus beaux véhicules aux citoyens.</p>
+            </div>
+
+            <div class="card">
+                <span class="job-tag tag-commerce">IMMOBILIER</span>
+                <h3>🏠 Agent Immo</h3>
+                <p>Trouvez le logement de rêve pour vos clients.</p>
+            </div>
+
+            <div class="card">
+                <span class="job-tag tag-commerce">FINANCE</span>
+                <h3>💰 Banquier</h3>
+                <p>Gérez les comptes, les prêts et l'économie locale.</p>
+            </div>
+
+            <div class="card">
+                <span class="job-tag tag-service">SERVICE</span>
+                <h3>🚕 Taxi</h3>
+                <p>Devenez le roi du bitume et transportez vos clients à bon port.</p>
+            </div>
+
+            <div class="card">
+                <span class="job-tag tag-service">PRESSE</span>
+                <h3>🎥 Weazel News</h3>
+                <p>Informez la ville des derniers événements et scoops.</p>
+            </div>
+
+            <div class="card">
+                <span class="job-tag tag-food">RESTAURATION</span>
+                <h3>🍜 Nouilles / CatCafé / Mirror / BurgerShot</h3>
+                <p>Préparez les meilleurs plats pour les gourmands.</p>
+            </div>
+
+            <div class="card">
+                <span class="job-tag tag-food">PRODUCTION</span>
+                <h3>🍇 Vigneron</h3>
+                <p>Cultivez vos terres et produisez les meilleurs crus.</p>
+            </div>
+
+            <div class="card">
+                <span class="job-tag tag-commerce">COMMERCE</span>
+                <h3>🚬 Tabac</h3>
+                <p>Gestion des stocks et vente de produits spécialisés.</p>
+            </div>
+
+            <div class="card">
+                <span class="job-tag tag-night">LOISIRS</span>
+                <h3>💃 Unicorn / Night Club / Paradise</h3>
+                <p>Gérez les soirées les plus branchées de la ville.</p>
+            </div>
+
+            <div class="card">
+                <span class="job-tag tag-night">LOISIRS</span>
+                <h3>🍸 Skybar / Club 77</h3>
+                <p>Le monde de la nuit vous appartient.</p>
+            </div>
+
+            <div class="card">
+                <span class="job-tag tag-none">DIVERS</span>
+                <h3>🧘 Unemployed</h3>
+                <p>À la recherche de nouvelles opportunités en ville.</p>
+            </div>
+
+            <div class="card">
+                <span class="job-tag" style="border-color: #ff3e3e; color: #ff3e3e;">GANG</span>
+                <h3>🩸 Groupes Illégaux</h3>
+                <p>Fondez votre organisation et gérez vos territoires.</p>
+            </div>
+
+        </div>
+    </div>
+</main>
+
+    <!-- REGLEMENT -->
+    <main id="page-rules" class="page-content">
+    <div class="content-wrapper">
+        <h2 class="section-title">Lois de la Ville</h2>
+        
+        <div class="grid-container two-cols">
+            <div class="card">
+                <h3 style="color: var(--primary); margin-bottom: 10px;">Interaction RP</h3>
+                <p>Le dialogue doit toujours primer sur l'action armée.</p>
+                <p>Le roleplay est obligatoire à tout moment.</p>
+                <p>Utilisez le micro ou le chat en RP.</p>
+            </div>
+
+            <div class="card">
+                <h3 style="color: var(--primary); margin-bottom: 10px;">Fair Play & Comportement</h3>
+                <p>Sachez perdre une scène pour le bien du divertissement.</p>
+                <p>Le fair-play et l’immersion passent avant tout.</p>
+                <p>Respectez tous les joueurs et le staff.</p>
+                <p>Aucune insulte HRP (hors roleplay) ne sera tolérée.</p>
+            </div>
+
+            <div class="card">
+                <h3 style="color: var(--primary); margin-bottom: 10px;">Règles de Survie (Gameplay)</h3>
+                <p><strong>No Fear RP :</strong> votre personnage doit craindre pour sa vie.</p>
+                <p><strong>Powergaming :</strong> faire des actions impossibles IRL.</p>
+                <p><strong>Metagaming :</strong> utiliser des infos OOC en RP.</p>
+                <p><strong>Revenge Kill :</strong> vous oubliez tout après votre mort RP.</p>
+            </div>
+
+            <div class="card">
+                <h3 style="color: var(--primary); margin-bottom: 10px;">Combat & Infractions</h3>
+                <p><strong>Free Kill :</strong> tuer sans raison RP valable.</p>
+                <p><strong>Spawn Kill :</strong> tuer quelqu’un à sa réapparition.</p>
+                <p><strong>Drive-By :</strong> pas d'abus (uniquement si logique RP).</p>
+                <p>Les braquages doivent être justifiés et bien organisés.</p>
+            </div>
+
+            <div class="card">
+                <h3 style="color: var(--primary); margin-bottom: 10px;">Conduite & Environnement</h3>
+                <p>Respectez le Code de la route RP (excès tolérés seulement en cas de poursuite).</p>
+                <p>Pas de flood, spam ou publicité dans les canaux de communication.</p>
+            </div>
+
+            <div class="card">
+                <h3 style="color: var(--secondary, #ff4444); margin-bottom: 10px;">Administration</h3>
+                <p><strong>Cheat / Exploit :</strong> interdit et sanctionné immédiatement.</p>
+                <p>Un manquement aux règles = sanction.</p>
+                <p>Le staff a toujours le dernier mot.</p>
+            </div>
+        </div>
+    </div>
+</main>
+
+    <!-- DOCUMENTS -->
+    <main id="page-docs" class="page-content">
+        <div class="content-wrapper">
+            <h2 class="section-title">Staff / Entreprise / Gang</h2>
+            <div class="grid-container">
+                <div class="card" style="text-align: center;">
+                    <h3 style="margin-bottom: 20px;">Candidature Staff</h3>
+                    <!-- REMPLACER LE LIEN ICI -->
+                    <a href="https://discord.com/channels/1256969027709046825/1256982224935456951" target="_blank" class="btn btn-primary" style="margin: 0 auto; display: inline-flex;">Ouvrir Un Ticket</a>
+                </div>
+                <div class="card" style="text-align: center;">
+                    <h3 style="margin-bottom: 20px;">Dossier Entreprise</h3>
+                    <!-- REMPLACER LE LIEN ICI -->
+                    <a href="https://discord.com/channels/1256969027709046825/1256986869175029831" target="_blank" class="btn btn-primary" style="margin: 0 auto; display: inline-flex;">Ouvrir Un Ticket</a>
+                </div>
+                <div class="card" style="text-align: center;">
+                    <h3 style="margin-bottom: 20px;">Dossier Gang</h3>
+                    <!-- REMPLACER LE LIEN ICI -->
+                    <a href="https://discord.com/channels/1256969027709046825/1256991086300102757" target="_blank" class="btn btn-primary" style="margin: 0 auto; display: inline-flex;">Ouvrir Un Ticket</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- REJOINDRE -->
+    <main id="page-join" class="page-content">
+        <div class="content-wrapper">
+            <h2 class="section-title">Accès Serveur</h2>
+            <div class="card" style="text-align: center; max-width: 600px; margin: 0 auto; padding: 50px 30px;">
+                <div style="font-size: 4rem; margin-bottom: 20px;">🚀</div>
+                <h3 style="color: var(--secondary); font-size: 2rem; margin-bottom: 15px;">FIVEM CONNECT</h3>
+                <p style="margin-bottom: 40px; opacity: 0.8;">Rejoignez instantanément notre serveur.</p>
+                <a href="fivem://connect/83.150.218.137:30136" class="btn btn-primary" style="padding: 25px; font-size: 1.1rem;">LANCER LA CONNEXION</a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="social-row">
+            <a href="https://www.tiktok.com/@nixioland.fa" target="_blank" class="social-link">TIKTOK</a>
+            <a href="https://www.instagram.com/nixiolandfalevrai/" target="_blank" class="social-link insta">INSTAGRAM</a>
+        </div>
+        <div class="logo" style="font-size: 1.2rem; margin-bottom: 15px; opacity: 0.5;">NIXIOLAND</div>
+        <p style="font-size: 0.8rem; opacity: 0.4;">&copy; 2026 NixioLand RP. Tous droits réservés.</p>
+    </footer>
+
+    <script>
+        const navMobile = document.getElementById('mobileNav');
+        const btnToggle = document.getElementById('menuBtn');
+        const header = document.getElementById('mainHeader');
+
+        // Effet scroll header
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) header.classList.add('scrolled');
+            else header.classList.remove('scrolled');
+        });
+
+        function toggleMenu() {
+            navMobile.classList.toggle('open');
+            btnToggle.classList.toggle('open');
+            document.body.classList.toggle('no-scroll');
+        }
+
+        function navigateTo(pageId) {
+            navMobile.classList.remove('open');
+            btnToggle.classList.remove('open');
+            document.body.classList.remove('no-scroll');
+
+            document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
+            const targetPage = document.getElementById('page-' + pageId);
+            if(targetPage) targetPage.classList.add('active');
+
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+                if(link.getAttribute('data-page') === pageId) link.classList.add('active');
+            });
+
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+
+        // --- SCRIPT DE FILTRAGE DE LA BOUTIQUE ---
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const vehicleCards = document.querySelectorAll('.vehicle-card');
+
+        filterButtons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                // 1. Gérer l'état actif des boutons
+                filterButtons.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+
+                // 2. Récupérer la catégorie à filtrer
+                const filterValue = this.getAttribute('data-filter');
+
+                // 3. Filtrer les cartes
+                vehicleCards.forEach(card => {
+                    const cardCategory = card.getAttribute('data-category');
+
+                    if (filterValue === 'all' || cardCategory === filterValue) {
+                        card.classList.remove('hidden');
+                    } else {
+                        card.classList.add('hidden');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
