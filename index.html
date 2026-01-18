@@ -754,16 +754,16 @@
                 <h3 style="color: var(--secondary); font-size: 2rem; margin-bottom: 15px;">FIVEM CONNECT</h3>
                 <p style="margin-bottom: 40px; opacity: 0.8;">Rejoignez instantanément notre serveur.</p>
                 
-                <button onclick="connectFiveM()" class="btn btn-primary" style="padding: 25px; font-size: 1.1rem; width: 100%; cursor: pointer;">
+                <button onclick="connectFiveM()" class="btn btn-primary" style="padding: 25px; font-size: 1.1rem; width: 100%; cursor: pointer; border: none; border-radius: 8px;">
                     LANCER LA CONNEXION
                 </button>
             </div>
         </div>
     </main>
-
+    
     <script>
-        // Ajoute cette fonction dans ta balise <script> en bas de ton index.html
         function connectFiveM() {
+            // Correction de la syntaxe : '_blank' entre guillemets
             window.open('fivem://connect/83.150.218.137:30136', '_blank');
         }
     </script>
@@ -840,5 +840,6 @@
 </body>
 
 </html>
+
 
 
