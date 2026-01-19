@@ -285,36 +285,6 @@
         .btn-primary { background: var(--primary); box-shadow: var(--neon-glow); }
         .btn-buy { background: linear-gradient(to right, var(--primary), var(--secondary)); margin-top: 15px; font-size: 0.75rem; padding: 12px; }
         .btn-discord { background: var(--discord); }
-
-        .music-player {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            z-index: 3000;
-            background: var(--bg-card);
-            border: 1px solid var(--primary);
-            padding: 10px;
-            border-radius: 50px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            box-shadow: var(--neon-glow);
-            transition: var(--transition);
-        }
-        .music-btn {
-            background: var(--primary);
-            border: none;
-            color: white;
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1rem;
-        }
-
         footer { padding: 180px 5% 40px; background: #050505; text-align: center; }
         .social-row { display: flex; justify-content: center; gap: 15px; margin-bottom: 30px; flex-wrap: wrap; }
         .social-link { min-width: 120px; padding: 12px 20px; border-radius: 10px; font-size: 0.8rem; font-weight: 800; text-decoration: none; color: white; background: #111; transition: var(--transition); border: 1px solid #222; }
@@ -333,14 +303,6 @@
     </style>
 </head>
 <body>
-    <audio id="bgMusic" loop>
-        <source src="music/nixioland.mp3" type="audio/mpeg">
-    </audio>
-
-    <div class="music-player">
-        <button onclick="toggleMusic()" class="music-btn" id="musicBtnAction">▶</button>
-        <span style="font-size: 0.7rem; font-weight: 700; color: var(--text-light); padding-right: 10px;">AUDIO</span>
-    </div>
 
     <div class="background-container">
         <div class="overlay-gradient"></div>
@@ -834,30 +796,6 @@
         }
 
         // 2. ÉLÉMENTS DE NAVIGATION (Déclarés une seule fois !)
-        const bgMusic = document.getElementById('bgMusic');
-        const musicBtn = document.getElementById('musicBtnAction');
-        let musicPlaying = false;
-
-        bgMusic.volume = 0.01; // Volume à 30%
-
-        function toggleMusic() {
-            if (musicPlaying) {
-                bgMusic.pause();
-                musicBtn.innerText = "▶";
-            } else {
-                bgMusic.play();
-                musicBtn.innerText = "⏸";
-            }
-            musicPlaying = !musicPlaying;
-        }
-
-        // Lancer la musique au premier clic sur le site (pour contourner les restrictions navigateurs)
-        document.body.addEventListener('click', () => {
-            if(!musicPlaying) {
-                // toggleMusic(); // Optionnel : décommente pour lecture auto au 1er clic
-            }
-        }, { once: true });
-
         const navMobile = document.getElementById('mobileNav');
         const btnToggle = document.getElementById('menuBtn');
         const header = document.getElementById('mainHeader');
