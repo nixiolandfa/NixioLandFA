@@ -285,7 +285,37 @@
         .btn-primary { background: var(--primary); box-shadow: var(--neon-glow); }
         .btn-buy { background: linear-gradient(to right, var(--primary), var(--secondary)); margin-top: 15px; font-size: 0.75rem; padding: 12px; }
         .btn-discord { background: var(--discord); }
-        footer { padding: 60px 5% 40px; background: #050505; text-align: center; border-top: 1px solid rgba(255, 255, 255, 0.05); }
+
+        .music-player {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 3000;
+            background: var(--bg-card);
+            border: 1px solid var(--primary);
+            padding: 10px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: var(--neon-glow);
+            transition: var(--transition);
+        }
+        .music-btn {
+            background: var(--primary);
+            border: none;
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+
+        footer { padding: 180px 5% 40px; background: #050505; text-align: center; }
         .social-row { display: flex; justify-content: center; gap: 15px; margin-bottom: 30px; flex-wrap: wrap; }
         .social-link { min-width: 120px; padding: 12px 20px; border-radius: 10px; font-size: 0.8rem; font-weight: 800; text-decoration: none; color: white; background: #111; transition: var(--transition); border: 1px solid #222; }
         .social-link.insta { background: var(--instagram); border: none; }
@@ -303,6 +333,14 @@
     </style>
 </head>
 <body>
+    <audio id="bgMusic" loop>
+        <source src="music/nixioland.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="music-player">
+        <button onclick="toggleMusic()" class="music-btn" id="musicBtnAction">▶</button>
+        <span style="font-size: 0.7rem; font-weight: 700; color: var(--text-light); padding-right: 10px;">AUDIO</span>
+    </div>
 
     <div class="background-container">
         <div class="overlay-gradient"></div>
@@ -313,8 +351,8 @@
         <nav class="desktop-nav">
             <ul>
                 <li><a href="#" onclick="navigateTo('home')" class="nav-link active" data-page="home">Accueil</a></li>
-                <li><a href="#" onclick="navigateTo('shopcar')" class="nav-link" data-page="shopcar">Boutique Voitures</a></li>
-                <li><a href="#" onclick="navigateTo('shopmoto')" class="nav-link" data-page="shopmoto">Boutique Motos</a></li>
+                <!--<li><a href="#" onclick="navigateTo('shopcar')" class="nav-link" data-page="shopcar">Boutique Voitures</a></li>-->
+                <!--<li><a href="#" onclick="navigateTo('shopmoto')" class="nav-link" data-page="shopmoto">Boutique Motos</a></li>-->
                 <li><a href="#" onclick="navigateTo('server')" class="nav-link" data-page="server">Serveur</a></li>
                 <li><a href="#" onclick="navigateTo('jobs')" class="nav-link" data-page="jobs">Métiers</a></li>
                 <li><a href="#" onclick="navigateTo('controls')" class="nav-link" data-page="controls">Touches</a></li>
@@ -331,8 +369,8 @@
     <nav class="mobile-nav" id="mobileNav">
         <ul>
             <li><a href="#" onclick="navigateTo('home')">Accueil</a></li>
-            <li><a href="#" onclick="navigateTo('shopcar')">Boutique Voitures</a></li>
-            <li><a href="#" onclick="navigateTo('shopmoto')">Boutique Motos</a></li>
+            <!--<li><a href="#" onclick="navigateTo('shopcar')">Boutique Voitures</a></li>-->
+            <!--<li><a href="#" onclick="navigateTo('shopmoto')">Boutique Motos</a></li>-->
             <li><a href="#" onclick="navigateTo('server')">Serveur</a></li>
             <li><a href="#" onclick="navigateTo('jobs')">Métiers</a></li>
             <li><a href="#" onclick="navigateTo('controls')">Touches</a></li>
@@ -349,15 +387,15 @@
             <p>VOTRE HISTOIRE COMMENCE ICI</p>
             <div class="cta-group">
                 <a href="#" onclick="navigateTo('join')" class="btn btn-primary">Rejoindre la ville</a>
-                <a href="#" onclick="navigateTo('shopcar')" class="btn" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);">Boutique voitures</a>
-                <a href="#" onclick="navigateTo('shopmoto')" class="btn" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);">Boutique motos</a>
+                <!--<a href="#" onclick="navigateTo('shopcar')" class="btn" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);">Boutique voitures</a>-->
+                <!--<a href="#" onclick="navigateTo('shopmoto')" class="btn" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);">Boutique motos</a>-->
                 <a href="https://discord.gg/TgVbXT9Kaf" target="_blank" class="btn btn-discord">Rejoindre Discord</a>
             </div>
         </section>
     </main>
 
     <!-- BOUTIQUE VOITURES -->
-    <main id="page-shopcar" class="page-content">
+    <!--<main id="page-shopcar" class="page-content">
     <div class="content-wrapper">
         <h2 class="section-title">Boutique Voitures</h2>
         <p class="section-subtitle">Personnalisez votre expérience avec nos voitures exclusifs</p>
@@ -399,24 +437,24 @@
 
         <div class="grid-container four-cols" id="vehiclesGrid">
             <div class="card vehicle-card" data-category="bmw">
-                <div class="vehicle-img" style="background-image: url('https://images.unsplash.com/photo-1544636331-e26879cd4d9b?q=80&w=1974&auto=format&fit=crop');">
+                <div class="vehicle-img" style="background-image: url('images/2ncsbmwm8.png');">
                     <div class="vehicle-price">1500 NC</div>
                 </div>
                 <div class="vehicle-info">
-                    <span class="vehicle-category">Super Sport</span>
-                    <h3 class="vehicle-name">Ferrari Purosangue</h3>
+                    <span class="vehicle-category">BMW</span>
+                    <h3 class="vehicle-name">BMW M8</h3>
                     <p style="font-size: 0.8rem; color: var(--text-muted);">Vitesse max : 320 km/h. Maniabilité exceptionnelle.</p>
                     <a href="https://paypal.me/nixiolandfa" target="_blank" class="btn btn-buy" style="display: block; text-align: center; text-decoration: none;">Acheter maintenant</a>
                 </div>
             </div>
 
             <div class="card vehicle-card" data-category="bmw">
-                <div class="vehicle-img" style="background-image: url('https://images.unsplash.com/photo-1603584173870-7f3ca99a918b?q=80&w=2070&auto=format&fit=crop');">
+                <div class="vehicle-img" style="background-image: url('images/2ncsx7.png');">
                     <div class="vehicle-price">1200 NC</div>
                 </div>
                 <div class="vehicle-info">
-                    <span class="vehicle-category">Sport</span>
-                    <h3 class="vehicle-name">BMW M4 Competition</h3>
+                    <span class="vehicle-category">BMW</span>
+                    <h3 class="vehicle-name">BMW X7</h3>
                     <p style="font-size: 0.8rem; color: var(--text-muted);">Le choix parfait pour les drifts en ville.</p>
                     <a href="https://paypal.me/nixiolandfa" target="_blank" class="btn btn-buy" style="display: block; text-align: center; text-decoration: none;">Acheter maintenant</a>
                 </div>
@@ -447,10 +485,10 @@
             </div>
         </div>
     </div>
-</main>
+</main>-->
 
 <!-- BOUTIQUE MOTOS -->
-    <main id="page-shopmoto" class="page-content">
+    <!--<main id="page-shopmoto" class="page-content">
     <div class="content-wrapper">
         <h2 class="section-title">Boutique Motos</h2>
         <p class="section-subtitle">Personnalisez votre expérience avec nos motos exclusifs</p>
@@ -501,24 +539,29 @@
             </div>
         </div>
     </div>
-</main>
+</main>-->
 
     <!-- SERVEUR -->
     <main id="page-server" class="page-content">
         <div class="content-wrapper">
-            <h2 class="section-title">L'Univers</h2>
+            <h2 class="section-title">L'Univers de Notre Serveur</h2>
+            
             <div class="grid-container">
                 <div class="card">
-                    <h3 style="color: var(--secondary); margin-bottom: 15px;">Économie Dynamique</h3>
-                    <p>Chaque action a un impact sur le marché. Créez votre entreprise, gérez vos stocks et dominez l'économie locale.</p>
+                    <h3 style="color: var(--secondary); margin-bottom: 15px;">Économie Réaliste</h3>
+                    <p>Plongez dans un système financier vivant où chaque transaction compte. Fondez votre empire, gérez vos employés et devenez le leader du marché local.</p>
                 </div>
                 <div class="card">
-                    <h3 style="color: var(--secondary); margin-bottom: 15px;">Scripts Exclusifs</h3>
-                    <p>Système de drogue avancé, braquages multi-étapes et inventaire visuel moderne pour une immersion sans précédent.</p>
+                    <h3 style="color: var(--secondary); margin-bottom: 15px;">Optimisation Fluide</h3>
+                    <p>Profitez d'une expérience de jeu sans ralentissements. Notre code et nos assets sont optimisés pour garantir une fluidité constante, même en pleine action.</p>
                 </div>
                 <div class="card">
-                    <h3 style="color: var(--secondary); margin-bottom: 15px;">Performance PC</h3>
-                    <p>Optimisation maximale du mapping et des véhicules pour garantir 100+ FPS même en zone de forte influence.</p>
+                    <h3 style="color: var(--secondary); margin-bottom: 15px;">Justice & Légalité</h3>
+                    <p>Rejoignez les forces de l'ordre ou le corps médical. Un système juridique complet avec avocats et juges assure l'équité pour tous les citoyens.</p>
+                </div>
+                <div class="card">
+                    <h3 style="color: var(--secondary); margin-bottom: 15px;">Événements Uniques</h3>
+                    <p>Participez chaque semaine à des scénarios organisés par notre équipe d'animation : courses illégales, soirées de gala et intrigues communautaires.</p>
                 </div>
             </div>
         </div>
@@ -624,7 +667,7 @@
 
             <div class="card">
                 <span class="job-tag tag-food">RESTAURATION</span>
-                <h3>🍜 Nouilles / CatCafé / Mirror / BurgerShot</h3>
+                <h3>🍜 Nouilles / CatCafé / Mirror / BurgerShot / WigWam</h3>
                 <p>Préparez les meilleurs plats pour les gourmands.</p>
             </div>
 
@@ -642,14 +685,8 @@
 
             <div class="card">
                 <span class="job-tag tag-night">LOISIRS</span>
-                <h3>💃 Unicorn / Night Club / Paradise</h3>
+                <h3>💃 Unicorn / Night Club / Paradise / Skybar / Club 77</h3>
                 <p>Gérez les soirées les plus branchées de la ville.</p>
-            </div>
-
-            <div class="card">
-                <span class="job-tag tag-night">LOISIRS</span>
-                <h3>🍸 Skybar / Club 77</h3>
-                <p>Le monde de la nuit vous appartient.</p>
             </div>
 
             <div class="card">
@@ -725,21 +762,34 @@
     <main id="page-docs" class="page-content">
         <div class="content-wrapper">
             <h2 class="section-title">Staff / Entreprise / Gang</h2>
+            <h2 class="section-title">Bug / Suggestion</h2>
             <div class="grid-container">
                 <div class="card" style="text-align: center;">
-                    <h3 style="margin-bottom: 20px;">Candidature Staff</h3>
+                    <h3 style="margin-bottom: 20px;">📃 Candidature Staff</h3>
                     <!-- REMPLACER LE LIEN ICI -->
-                    <a href="https://discord.com/channels/1256969027709046825/1256982224935456951" target="_blank" class="btn btn-primary" style="margin: 0 auto; display: inline-flex;">Ouvrir Un Ticket</a>
+                    <a href="discord://discord.com/channels/1256969027709046825/1256982224935456951" target="_blank" class="btn btn-primary" style="margin: 0 auto; display: inline-flex;">Ouvrir Un Ticket</a>
                 </div>
                 <div class="card" style="text-align: center;">
-                    <h3 style="margin-bottom: 20px;">Dossier Entreprise</h3>
+                    <h3 style="margin-bottom: 20px;">📁 Dossier Entreprise</h3>
                     <!-- REMPLACER LE LIEN ICI -->
-                    <a href="https://discord.com/channels/1256969027709046825/1256986869175029831" target="_blank" class="btn btn-primary" style="margin: 0 auto; display: inline-flex;">Ouvrir Un Ticket</a>
+                    <a href="discord://discord.com/channels/1449056086526136342/1449085779665092628" target="_blank" class="btn btn-primary" style="margin: 0 auto; display: inline-flex;">Ouvrir Un Ticket</a>
                 </div>
                 <div class="card" style="text-align: center;">
-                    <h3 style="margin-bottom: 20px;">Dossier Gang</h3>
+                    <h3 style="margin-bottom: 20px;">📁 Dossier Gang</h3>
                     <!-- REMPLACER LE LIEN ICI -->
-                    <a href="https://discord.com/channels/1256969027709046825/1256991086300102757" target="_blank" class="btn btn-primary" style="margin: 0 auto; display: inline-flex;">Ouvrir Un Ticket</a>
+                    <a href="discord://discord.com/channels/1452740305487921229/1452742475243589783" target="_blank" class="btn btn-primary" style="margin: 0 auto; display: inline-flex;">Ouvrir Un Ticket</a>
+                </div>
+
+                <div class="card" style="text-align: center;">
+                    <h3 style="margin-bottom: 20px;">❗Bug</h3>
+                    <!-- REMPLACER LE LIEN ICI -->
+                    <a href="discord://discord.com/channels/1256969027709046825/1392015841456816221" target="_blank" class="btn btn-primary" style="margin: 0 auto; display: inline-flex;">Signalez Un Bug</a>
+                </div>
+
+                <div class="card" style="text-align: center;">
+                    <h3 style="margin-bottom: 20px;">💡Suggestion</h3>
+                    <!-- REMPLACER LE LIEN ICI -->
+                    <a href="discord://discord.com/channels/1256969027709046825/1256985850294833323" target="_blank" class="btn btn-primary" style="margin: 0 auto; display: inline-flex;">Emettre Une Suggestion</a>
                 </div>
             </div>
         </div>
@@ -753,6 +803,8 @@
                 <div style="font-size: 4rem; margin-bottom: 20px;">🚀</div>
                 <h3 style="color: var(--secondary); font-size: 2rem; margin-bottom: 15px;">FIVEM CONNECT</h3>
                 <p style="margin-bottom: 40px; opacity: 0.8;">Rejoignez instantanément notre serveur.</p>
+                <p style="margin-bottom: 40px; opacity: 0.8; font-weight: bold;">Assure-toi de lancer STEAM et DISCORD avant de cliquer sur ci-dessous.</p>
+                <p style="margin-bottom: 40px; opacity: 0.8; font-weight: bold; font-size: 40px; color: #00d4ff;">🢃</p>
                 
                 <button onclick="connectFiveM()" class="btn btn-primary" style="padding: 25px; font-size: 1.1rem; width: 100%; cursor: pointer; border: none; border-radius: 8px;">
                     LANCER LA CONNEXION
@@ -782,6 +834,30 @@
         }
 
         // 2. ÉLÉMENTS DE NAVIGATION (Déclarés une seule fois !)
+        const bgMusic = document.getElementById('bgMusic');
+        const musicBtn = document.getElementById('musicBtnAction');
+        let musicPlaying = false;
+
+        bgMusic.volume = 0.01; // Volume à 30%
+
+        function toggleMusic() {
+            if (musicPlaying) {
+                bgMusic.pause();
+                musicBtn.innerText = "▶";
+            } else {
+                bgMusic.play();
+                musicBtn.innerText = "⏸";
+            }
+            musicPlaying = !musicPlaying;
+        }
+
+        // Lancer la musique au premier clic sur le site (pour contourner les restrictions navigateurs)
+        document.body.addEventListener('click', () => {
+            if(!musicPlaying) {
+                // toggleMusic(); // Optionnel : décommente pour lecture auto au 1er clic
+            }
+        }, { once: true });
+
         const navMobile = document.getElementById('mobileNav');
         const btnToggle = document.getElementById('menuBtn');
         const header = document.getElementById('mainHeader');
@@ -840,4 +916,3 @@
     </footer>
 </body>
 </html>
-
