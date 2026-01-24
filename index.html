@@ -20,6 +20,10 @@
             --neon-glow: 0 0 20px rgba(138, 43, 226, 0.5);
             --discord: #5865F2;
             --instagram: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+            --nl-green: #27834d;
+            --nl-gold: #ffb700;
+            --nl-epic: #a335ee;
+            --nl-legend: #ff4d4d;
         }
 
         * {
@@ -231,6 +235,39 @@
             flex-wrap: wrap;
         }
 
+        .btn-shop-hero {
+            background: var(--nl-green) !important;
+            border: 1px solid var(--nl-green);
+            color: #fdfcfc !important;
+            font-weight: 900;
+            box-shadow: 0 0 20px rgba(46, 204, 113, 0.4);
+        }
+
+        /* Cartes de la boutique */
+        #page-shop-coins .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-top: 4px solid var(--primary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        #page-shop-coins .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .bonus-tag {
+            background: #fff;
+            color: #000;
+            font-size: 0.7rem;
+            font-weight: 900;
+            padding: 2px 8px;
+            border-radius: 4px;
+            position: absolute;
+            top: 15px;
+            left: 15px;
+        }
+
         .filter-btn {
             background: rgba(255,255,255,0.05);
             border: 1px solid rgba(255,255,255,0.1);
@@ -313,6 +350,7 @@
         <nav class="desktop-nav">
             <ul>
                 <li><a href="#" onclick="navigateTo('home')" class="nav-link active" data-page="home">Accueil</a></li>
+                <li><a href="#" onclick="navigateTo('shop-coins')" class="nav-link" data-page="shop-coins">Boutique NLCoins</a></li>
                 <!--<li><a href="#" onclick="navigateTo('shopcar')" class="nav-link" data-page="shopcar">Boutique Voitures</a></li>-->
                 <!--<li><a href="#" onclick="navigateTo('shopmoto')" class="nav-link" data-page="shopmoto">Boutique Motos</a></li>-->
                 <li><a href="#" onclick="navigateTo('server')" class="nav-link" data-page="server">Serveur</a></li>
@@ -331,6 +369,7 @@
     <nav class="mobile-nav" id="mobileNav">
         <ul>
             <li><a href="#" onclick="navigateTo('home')">Accueil</a></li>
+            <li><a href="#" onclick="navigateTo('shop-coins')">Boutique NLCoins</a></li>
             <!--<li><a href="#" onclick="navigateTo('shopcar')">Boutique Voitures</a></li>-->
             <!--<li><a href="#" onclick="navigateTo('shopmoto')">Boutique Motos</a></li>-->
             <li><a href="#" onclick="navigateTo('server')">Serveur</a></li>
@@ -349,11 +388,125 @@
             <p>VOTRE HISTOIRE COMMENCE ICI</p>
             <div class="cta-group">
                 <a href="#" onclick="navigateTo('join')" class="btn btn-primary">Rejoindre la ville</a>
+                <a href="#" onclick="navigateTo('shop-coins')" class="btn btn-shop-hero" data-page="shop-coins">Boutique NLCoins</a>
                 <!--<a href="#" onclick="navigateTo('shopcar')" class="btn" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);">Boutique voitures</a>-->
                 <!--<a href="#" onclick="navigateTo('shopmoto')" class="btn" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);">Boutique motos</a>-->
                 <a href="https://discord.gg/TgVbXT9Kaf" target="_blank" class="btn btn-discord">Rejoindre Discord</a>
             </div>
         </section>
+    </main>
+
+    <main id="page-shop-coins" class="page-content">
+        <div class="content-wrapper">
+            <h2 class="section-title">Boutique NLCoins</h2>
+            <p class="section-subtitle">Soutenez le serveur et profitez d'avantages exclusifs en jeu</p>
+
+            <div class="grid-container">
+                <div class="card" style="border-color: var(--text-muted);">
+                    <div style="font-size: 2.5rem; margin-bottom: 10px;">🪙</div>
+                    <h3>Pack Initial</h3>
+                    <p style="font-size: 2.2rem; font-weight: 900; color: #fff; margin: 10px 0;">100 NC</p>
+                    <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 20px;">Le petit plus pour commencer.</p>
+                    <a href="https://paypal.me/nixiolandfa/1" target="_blank" class="btn btn-primary" style="font-size: 0.7rem; opacity: 0.8;">Acheter - 1€</a>
+                </div>
+
+                <div class="card" style="border-color: var(--secondary);">
+                    <div style="font-size: 2.5rem; margin-bottom: 10px;">📦</div>
+                    <h3 style="color: var(--secondary);">Pack Starter</h3>
+                    <p style="font-size: 2.2rem; font-weight: 900; color: #fff; margin: 10px 0;">500 NC</p>
+                    <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 20px;">Parfait pour personnaliser son look.</p>
+                    <a href="https://paypal.me/nixiolandfa/5" target="_blank" class="btn" style="background: var(--secondary); font-size: 0.7rem; color: #000; font-weight:700;">Acheter - 5€</a>
+                </div>
+
+                <div class="card" style="border-color: var(--primary); transform: scale(1.05); z-index: 10; background: rgba(138, 43, 226, 0.05);">
+                    <span class="job-tag" style="position: absolute; top: 10px; right: 10px; background: var(--primary);">POPULAIRE</span>
+                    <div style="font-size: 2.5rem; margin-bottom: 10px;">💰</div>
+                    <h3 style="color: var(--primary);">Pack Citoyen</h3>
+                    <p style="font-size: 2.2rem; font-weight: 900; color: #fff; margin: 10px 0;">1000 NC</p>
+                    <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 20px;">Le choix n°1 de la communauté.</p>
+                    <a href="https://paypal.me/nixiolandfa/10" target="_blank" class="btn btn-primary">Acheter - 10€</a>
+                </div>
+
+                <div class="card" style="border-color: var(--nl-epic);">
+                    <span class="bonus-tag">+10% OFFERTS</span>
+                    <div style="font-size: 2.5rem; margin-bottom: 10px;">💎</div>
+                    <h3 style="color: var(--nl-epic);">Pack Épique</h3>
+                    <p style="font-size: 2.2rem; font-weight: 900; color: #fff; margin: 10px 0;">2750 NC</p>
+                    <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 20px;">Inclus un bonus de 250 NC.</p>
+                    <a href="https://paypal.me/nixiolandfa/25" target="_blank" class="btn" style="background: var(--nl-epic); font-size: 0.7rem; color: white;">Acheter - 25€</a>
+                </div>
+
+                <div class="card" style="border-color: var(--nl-gold);">
+                    <span class="bonus-tag">+15% OFFERTS</span>
+                    <div style="font-size: 2.5rem; margin-bottom: 10px;">👑</div>
+                    <h3 style="color: var(--nl-gold);">Pack Impérial</h3>
+                    <p style="font-size: 2.2rem; font-weight: 900; color: #fff; margin: 10px 0;">5750 NC</p>
+                    <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 20px;">Inclus un bonus de 750 NC.</p>
+                    <a href="https://paypal.me/nixiolandfa/50" target="_blank" class="btn" style="background: var(--nl-gold); font-size: 0.7rem; color: #000; font-weight: 900;">Acheter - 50€</a>
+                </div>
+
+                <div class="card" style="border-color: var(--nl-green);">
+                    <span class="bonus-tag">+20% OFFERTS</span>
+                    <div style="font-size: 2.5rem; margin-bottom: 10px;">🚀</div>
+                    <h3 style="color: var(--nl-green);">Pack Business</h3>
+                    <p style="font-size: 2.2rem; font-weight: 900; color: #fff; margin: 10px 0;">12000 NC</p>
+                    <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 20px;">Inclus un bonus de 2000 NC.</p>
+                    <a href="https://paypal.me/nixiolandfa/80" target="_blank" class="btn" style="background: var(--nl-green); font-size: 0.7rem; color: #000; font-weight: 900;">Acheter - 80€</a>
+                </div>
+
+                <div class="card" style="border-color: var(--nl-legend); background: rgba(255, 77, 77, 0.05);">
+                    <span class="bonus-tag" style="background: var(--nl-legend); color: white;">MEILLEURE OFFRE (+25%)</span>
+                    <div style="font-size: 2.5rem; margin-bottom: 10px;">🔥</div>
+                    <h3 style="color: var(--nl-legend);">Pack Légende</h3>
+                    <p style="font-size: 2.2rem; font-weight: 900; color: #fff; margin: 10px 0;">25000 NC</p>
+                    <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 20px;">Inclus un bonus de 5000 NC.</p>
+                    <a href="https://paypal.me/nixiolandfa/150" target="_blank" class="btn" style="background: var(--nl-legend); font-size: 0.7rem; color: white; font-weight: 900;">Acheter - 150€</a>
+                </div>
+            </div>
+
+            <div style="margin-top: 60px; padding: 40px; border-radius: 20px; background: linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%); border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 20px 40px rgba(0,0,0,0.4); position: relative; overflow: hidden;">
+    
+                <div style="position: absolute; top: -50px; right: -50px; width: 150px; height: 150px; background: var(--primary); filter: blur(100px); opacity: 0.15; pointer-events: none;"></div>
+
+                <h3 style="margin-bottom: 35px; font-size: 1.5rem; letter-spacing: 1px; text-transform: uppercase; color: #fff; display: flex; align-items: center; justify-content: center; gap: 15px;">
+                    <span style="color: var(--nl-green);">⚡</span> Informations Utiles
+                </h3>
+
+                <div class="grid-container" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; text-align: left;">
+                    
+                    <div style="background: rgba(255,255,255,0.03); padding: 20px; border-radius: 12px; border-left: 3px solid var(--secondary); transition: 0.3s hover;">
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                            <span style="font-size: 1.2rem;">🕒</span>
+                            <strong style="color: white; font-size: 1rem;">Délais de livraison</strong>
+                        </div>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.6;">
+                            Les NLCoins sont ajoutés manuellement. Livraison éclair constatée en moins de <span style="color: var(--secondary); font-weight: bold;">2 heures</span>.
+                        </p>
+                    </div>
+
+                    <div style="background: rgba(255,255,255,0.03); padding: 20px; border-radius: 12px; border-left: 3px solid var(--nl-green);">
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                            <span style="font-size: 1.2rem;">🛡️</span>
+                            <strong style="color: white; font-size: 1rem;">Sécurité Totale</strong>
+                        </div>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.6;">
+                            Paiements 100% sécurisés via <span style="color: #0070ba; font-weight: bold;">PayPal</span>. Votre facture est envoyée instantanément par mail.
+                        </p>
+                    </div>
+
+                    <div style="background: rgba(255,255,255,0.03); padding: 20px; border-radius: 12px; border-left: 3px solid var(--primary);">
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                            <span style="font-size: 1.2rem;">🎧</span>
+                            <strong style="color: white; font-size: 1rem;">Support VIP</strong>
+                        </div>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.6;">
+                            Une question ? Notre équipe vous répond sur <span style="color: var(--discord); font-weight: bold;">Discord</span> via le salon <code>#boutique</code>.
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
     </main>
 
     <!-- BOUTIQUE VOITURES -->
